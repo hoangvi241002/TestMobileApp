@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../view_models/login_bloc.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -29,52 +28,101 @@ class _LoginScreenState extends State<LoginScreen> {
           if (state is LoginSuccess) {
             Navigator.pushReplacementNamed(context, '/home');
           } else if (state is LoginFailure) {
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message)));
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(state.message)));
           }
         },
-        child: BlocBuilder<LoginBloc, LoginState> (
+        child: BlocBuilder<LoginBloc, LoginState>(
           builder: (context, state) {
-            if(state is LoginLoading) {
+            if (state is LoginLoading) {
               return const Center(child: CircularProgressIndicator());
             }
-            
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Form(
-                key: _formKey,
+
+            return SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    TextFormField(
-                      controller: _emailController,
-                      decoration: const InputDecoration(labelText: "Email"),
-                      validator: (value) {
-                        if(value == null || value.isEmpty || !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-                          return 'Please enter a valid email';
-                        }
-                        return null;
-                      },
-                    ),
-                    TextFormField(
-                      controller: _passwordController,
-                      decoration: const InputDecoration(labelText: "Password"),
-                      obscureText: true,
-                      validator: (value) {
-                        if (value == null || value.isEmpty || value.length < 6 || !RegExp(r'^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{6,}$').hasMatch(value)) {
-                          return 'Password must be at least 6 characters, include an uppercase letter, a lowercase letter, and a number';
-                        }
-                        return null;
-                      },
-                    ),
                     const SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          BlocProvider.of<LoginBloc>(context).login(_emailController.text, _passwordController.text);
-                        }
-                      },
-                      child: const Text('Login'),
-                    )
+                    const Text(
+                      "Welcome!",
+                      style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blueAccent),
+                    ),
+                    const SizedBox(height: 10),
+                    const Text(
+                      "Login to your account",
+                      style: TextStyle(fontSize: 18, color: Colors.grey),
+                    ),
+                    const SizedBox(height: 40),
+                    Form(
+                      key: _formKey,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          TextFormField(
+                            controller: _emailController,
+                            decoration: InputDecoration(
+                              labelText: "Email",
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              prefixIcon: const Icon(Icons.email),
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty || !RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+                                return 'Please enter a valid email.';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 20),
+                          TextFormField(
+                            controller: _passwordController,
+                            decoration: InputDecoration(
+                              labelText: "Password",
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              prefixIcon: const Icon(Icons.lock),
+                            ),
+                            obscureText: true,
+                            validator: (value) {
+                              if (value == null || value.isEmpty || value.length < 6 || !RegExp(r'^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{6,}$').hasMatch(value)) {
+                                return 'Password must be at least 6 characters. \nInclude an uppercase letter. \nA lowercase letter, and a number.';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 30),
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                if (_formKey.currentState!.validate()) {
+                                  BlocProvider.of<LoginBloc>(context).login(
+                                      _emailController.text,
+                                      _passwordController.text);
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(vertical: 16),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              child: const Text(
+                                'Sign In',
+                                style: TextStyle(fontSize: 18),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),

@@ -15,13 +15,14 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Home'),
         actions: [
+          const Text("Log Out"),
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () {
               BlocProvider.of<LoginBloc>(context).logout();
               Navigator.pushReplacementNamed(context, '/');
             },
-          )
+          ),
         ],
       ),
       body: BlocBuilder<HomeBloc, HomeState>(
@@ -35,14 +36,34 @@ class HomeScreen extends StatelessWidget {
                 itemCount: state.items.length + 1,
                 itemBuilder: (context, index) {
                   if (index == state.items.length) {
-                    return ElevatedButton(
-                      onPressed: () {
-                        BlocProvider.of<HomeBloc>(context).loadMore();
-                      },
-                      child: const Text('Load More'),
+                    return Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          BlocProvider.of<HomeBloc>(context).loadMore();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 16), backgroundColor: Colors.blueAccent,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        child: const Text('Load More', style: TextStyle(fontSize: 16, color: Colors.white)),
+                      ),
                     );
                   }
-                  return ListTile(title: Text(state.items[index]));
+                  return Card(
+                    margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    child: ListTile(
+                      title: Text(state.items[index]),
+                      leading: const Icon(Icons.check_circle, color: Colors.blueAccent),
+                      tileColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                    ),
+                  );
                 },
               ),
             );
@@ -53,4 +74,3 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
-
