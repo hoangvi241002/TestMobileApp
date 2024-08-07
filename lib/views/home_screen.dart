@@ -8,6 +8,9 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Trigger initial loading of items
+    BlocProvider.of<HomeBloc>(context).refresh();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Home'),
@@ -50,3 +53,4 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
+

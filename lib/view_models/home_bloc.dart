@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeBloc extends Cubit<HomeState> {
-  HomeBloc() : super(HomeInitial());
+  HomeBloc() : super(HomeLoaded([])); // Start with empty list
 
   List<String> items = List.generate(10, (index) => 'Item ${index + 1}');
 
@@ -17,6 +17,7 @@ class HomeBloc extends Cubit<HomeState> {
     emit(HomeLoaded(items));
   }
 }
+
 
 abstract class HomeState {}
 
